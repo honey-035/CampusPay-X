@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1110">
+  <title>CampusPay X — Self-Healing Control Center</title>
+  <link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/"><span class="brand-mark">CX</span><span><b>CampusPay <i>X</i></b><small>SELF-HEALING CONTROL CENTER</small></span></a>
+      <div class="top-right"><span class="simulation-pill"><span class="pulse"></span> SIMULATION ONLY</span><span class="system-health"><span id="healthDot" class="health-dot"></span><span id="healthLabel">Connecting…</span></span><button id="refreshButton" class="icon-button" type="button" title="Refresh data">↻</button></div>
+    </header>
+    <main class="main">
+      <section class="welcome-row"><div><p class="eyebrow">LIVE RELIABILITY DEMO <span class="live-tag">● LIVE</span></p><h1>Payments that <span>heal themselves.</span></h1><p class="subhead">Create a payment, inject a failure, and watch CampusPay X detect, diagnose, recover, and verify it — all in one place.</p></div><div class="current-mode"><span class="mode-label">GATEWAY MODE</span><strong id="gatewayMode">Checking…</strong><small id="circuitMode">Circuit: checking…</small></div></section>
+      <section class="metric-row" aria-label="Live metrics">
+        <article class="metric"><span class="metric-icon green">✓</span><div><small>Successful payments</small><strong id="metricSuccess">—</strong><span>Persisted records</span></div></article>
+        <article class="metric"><span class="metric-icon amber">◷</span><div><small>Pending verification</small><strong id="metricPending">—</strong><span>Need a confirmed outcome</span></div></article>
+        <article class="metric"><span class="metric-icon purple">↻</span><div><small>Incidents recovered</small><strong id="metricRecovered">—</strong><span>Verified recovery outcomes</span></div></article>
+        <article class="metric"><span class="metric-icon teal">◴</span><div><small>Average recovery</small><strong id="metricRecoveryTime">No data</strong><span id="metricRecoverySample">Measured sample</span></div></article>
+      </section>
+
+      <section class="workspace-grid">
+        <div class="left-column">
+          <article class="panel payment-panel">
+            <div class="panel-title"><div><span class="step-label">01 / PAYMENT</span><h2>Create a payment</h2><p>Run a normal transaction or use it as the starting point for a failure demo.</p></div><span class="panel-symbol">₹</span></div>
+            <form id="paymentForm">
+              <label for="studentName">Student name</label><input id="studentName" name="studentName" minlength="2" maxlength="80" placeholder="e.g. Demo Student" value="Demo Student" required>
+              <div class="form-two"><div><label for="purpose">Purpose</label><select id="purpose" name="purpose"><option>Canteen</option><option>College Fee</option><option>Library Fee</option></select></div><div><label for="amount">Amount (₹)</label><input id="amount" name="amount" type="number" min="1" max="100000" step="0.01" value="120" required></div></div>
+              <button id="payButton" class="button button-primary full-button" type="submit"><span>＋</span> Process simulated payment</button><p class="form-footnote">No bank, payment gateway, or real money is involved.</p><p id="message" class="message" role="status" aria-live="polite"></p>
+            </form>
+          </article>
+          <article class="panel failure-panel">
+            <div class="panel-title"><div><span class="step-label">02 / CONTROLLED FAILURE</span><h2>Inject a scenario</h2><p>Choose what breaks. The backend will run the real scenario.</p></div><span class="panel-symbol lightning">ϟ</span></div>
+            <div class="scenario-grid">
+              <button class="scenario-button" data-scenario="SLOW" type="button"><span class="scenario-icon slow">◷</span><span><b>Slow gateway</b><small>Introduce latency</small></span><span class="scenario-arrow">↗</span></button>
+              <button class="scenario-button" data-scenario="UNAVAILABLE" type="button"><span class="scenario-icon down">!</span><span><b>Gateway outage</b><small>Trigger retries & circuit</small></span><span class="scenario-arrow">↗</span></button>
+              <button class="scenario-button" data-scenario="LOST_RESPONSE" type="button"><span class="scenario-icon lost">↯</span><span><b>Lost response</b><small>Recover uncertain result</small></span><span class="scenario-arrow">↗</span></button>
+              <button class="scenario-button" data-scenario="INVALID_RESPONSE" type="button"><span class="scenario-icon invalid">◇</span><span><b>Invalid response</b><small>Reject & reconcile safely</small></span><span class="scenario-arrow">↗</span></button>
+            </div>
+            <div class="control-footer"><span><span class="pulse"></span> Development controls</span><button id="resetGateway" class="button button-secondary" type="button">Reset to normal</button></div>
+            <p id="scenarioMessage" class="scenario-message" role="status">Choose a scenario to see the system react here.</p>
+          </article>
+        </div>
+
+        <div class="right-column">
+          <article class="panel flow-panel" aria-live="polite">
+            <div class="panel-title flow-title"><div><span class="step-label">03 / SELF-HEALING ENGINE</span><h2>Watch the recovery flow</h2><p>Progress updates from recorded backend events.</p></div><span id="flowState" class="state-pill neutral">IDLE</span></div>
+            <div class="flow-track" id="flowTrack">
+              <div class="flow-step" data-stage="DETECTED"><span class="flow-node">1</span><div><b>Request / signal detected</b><small>System records the transaction or abnormal result</small></div><span class="flow-check">○</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step" data-stage="DIAGNOSING"><span class="flow-node">2</span><div><b>Diagnose the cause</b><small>Classify failure and choose a safe action</small></div><span class="flow-check">○</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step" data-stage="RECOVERING"><span class="flow-node">3</span><div><b>Process / recover</b><small>Accept a valid response or reconcile safely</small></div><span class="flow-check">○</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step" data-stage="VERIFIED"><span class="flow-node">4</span><div><b>Verify the result</b><small>Confirm the final state using evidence</small></div><span class="flow-check">○</span></div>
+            </div>
+            <div id="flowExplanation" class="flow-explanation"><span class="explanation-icon">i</span><p><b>What am I looking at?</b><br>Choose a failure on the left. Each step will light up as the backend records what actually happened.</p></div>
+            <div class="active-transaction"><div><small>ACTIVE TRANSACTION</small><strong id="activeTransaction">No transaction selected</strong></div><span id="activeTransactionStatus" class="status-chip neutral">WAITING</span></div>
+          </article>
+          <article class="panel event-panel"><div class="panel-title compact"><div><span class="step-label">LIVE EVENT STREAM</span><h2>What just happened?</h2></div><span class="stream-dot"><span class="pulse"></span> AUTO</span></div><div id="liveEvents" class="live-events"><div class="empty-event">Run a payment or failure scenario to see the real event trail.</div></div><button id="viewAllEvents" class="text-button" type="button">View latest recorded events ↓</button></article>
+        </div>
+      </section>
+
+      <section class="analytics-grid">
+        <article class="panel chart-panel"><div class="panel-title compact"><div><span class="step-label">OBSERVABILITY</span><h2>Failure & recovery activity</h2><p>Counts calculated from persisted event records.</p></div><span class="chart-legend"><i></i> Recorded events</span></div><div class="chart-wrap"><canvas id="eventChart" aria-label="Recorded event counts chart"></canvas><div id="chartEmpty" class="chart-empty hidden">Not enough event data yet. Run a scenario to populate the chart.</div></div></article>
+        <article class="panel chart-panel"><div class="panel-title compact"><div><span class="step-label">TRANSACTION HEALTH</span><h2>Payment outcomes</h2><p>Current transaction history window.</p></div></div><div class="outcome-chart"><div id="outcomeRing" class="donut"><div><strong id="outcomeTotal">0</strong><small>transactions</small></div></div><div class="outcome-legend"><div><i class="legend-success"></i><span>Successful</span><b id="outcomeSuccess">0</b></div><div><i class="legend-pending"></i><span>Pending</span><b id="outcomePending">0</b></div><div><i class="legend-problem"></i><span>Unresolved / failed</span><b id="outcomeProblem">0</b></div></div></div></article>
+      </section>
+
+      <section class="panel history-panel"><div class="panel-title compact"><div><span class="step-label">PAYMENT LEDGER</span><h2>Recent transactions</h2><p>Select a transaction to load its actual event trail into the recovery panel.</p></div><a class="text-link" href="/dashboard.html">Advanced command center ↗</a></div><div class="table-wrap"><table><thead><tr><th>Transaction</th><th>Student</th><th>Purpose</th><th>Amount</th><th>Status</th><th>Created</th><th></th></tr></thead><tbody id="historyBody"><tr><td colspan="7" class="empty-cell">Loading transactions…</td></tr></tbody></table></div></section>
+      <footer class="footer"><span>CampusPay X · Self-healing reliability demonstration</span><span><a href="/benchmark.html">Benchmark</a><span class="footer-dot">·</span><a href="/api/health" target="_blank" rel="noreferrer">API health</a><span class="footer-dot">·</span> No real money</span></footer>
+    </main>
+  </div>
+</body>
+</html>
