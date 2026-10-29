@@ -369,7 +369,6 @@ We acknowledge that self-healing has limits. Our verified PM2 crash-recovery tes
 
 **Team:** Honey Sadnani and Krishna Dhalwal  
 **Institution:** Dezyne École College  
-**Guide:** Not provided in the supplied project details; fill in the correct guide name if required by the submission format.
 
 AI assistance was used for coding/debugging support and project documentation. Refer to `docs/AI_Use_Declaration.pdf` for the formal declaration and ensure it matches the final submitted work and the hackathon's disclosure requirements.
 
